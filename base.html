@@ -1,0 +1,920 @@
+
+<!-- Main Content -->
+<main class="main-content" role="main">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="mt-1">
+    <ol class="breadcrumb breadcrumb-custom small" itemscope itemtype="https://schema.org/BreadcrumbList">
+
+        <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a title="Tools Development" href="https://mate.tools/#development" itemprop="item">
+                <span itemprop="name">Development</span>
+            </a>
+            <meta itemprop="position" content="1" />
+        </li>
+
+
+        <li class="breadcrumb-item active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+            <a itemprop="item" href="https://mate.tools/regex-tester" class="no-click">
+                <span itemprop="name">Regex tester</span>
+            </a>
+            <meta itemprop="position" content="2" />
+        </li>
+
+    </ol>
+</nav>
+
+<style>
+    .no-click {
+        pointer-events: none;
+        text-decoration: none;
+        color: inherit;
+        font-size: 0.875rem;
+    }
+</style>               <!-- Tool Header -->
+       <div class="row mb-0">
+            <div class="col-12">
+                <h1 class="h5 fw-bold mb-1">Real-Time Regex Tester: Debug & Validate Text Patterns Efficiently</h1>
+                
+                <p class="text-muted small">Test and debug regular expressions in real time with this powerful regex tester. Features pattern matching, syntax highlighting, common regex examples, and a comprehensive reference guide. Perfect for developers validating text patterns.</p>
+            </div>
+        </div>
+
+        
+        <!-- Main Tool Section -->
+        <div class="row g-4">
+            <!-- Main Column -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <form id="regexForm" class="needs-validation" novalidate>
+                            <!-- Pattern Input -->
+                            <div class="mb-4">
+                                <label for="regexPattern" class="form-label d-flex justify-content-between align-items-center">
+                                    <span>Regular Expression Pattern</span>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="copyPattern">
+                                        <i class="bi bi-clipboard me-1"></i>Copy Pattern                                    </button>
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text border-end-0 bg-light fw-bold text-secondary">/</span>
+                                    <input type="text" class="form-control border-start-0 border-end-0 mono" 
+                                           id="regexPattern" placeholder="Enter your regex pattern (e.g., \b\w+@\w+\.\w+\b)">
+                                    <span class="input-group-text border-start-0 border-end-0 fw-bold text-secondary">/</span>
+                                    <input type="text" class="form-control border-start-0 mono flags-input" 
+                                           id="regexFlags" style="max-width: 120px">
+                                </div>
+                            </div>
+
+                            <!-- Flags Section -->
+                            <div class="mb-4">
+                                <label class="form-label">Regex Flags</label>
+                                <div class="btn-group flag-buttons" role="group">
+                                    <input type="checkbox" class="btn-check" id="flagGlobal" autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="flagGlobal" data-bs-toggle="tooltip" 
+                                           title="Find all matches rather than stopping after the first match">g</label>
+
+                                    <input type="checkbox" class="btn-check" id="flagMultiline" autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="flagMultiline" data-bs-toggle="tooltip" 
+                                           title="^/$ match start/end of each line">m</label>
+
+                                    <input type="checkbox" class="btn-check" id="flagInsensitive" autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="flagInsensitive" data-bs-toggle="tooltip" 
+                                           title="Makes the whole expression case-insensitive">i</label>
+
+                                    <input type="checkbox" class="btn-check" id="flagSticky" autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="flagSticky" data-bs-toggle="tooltip" 
+                                           title="Matches only from the lastIndex position">y</label>
+
+                                    <input type="checkbox" class="btn-check" id="flagUnicode" autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="flagUnicode" data-bs-toggle="tooltip" 
+                                           title="Enables full Unicode pattern matching">u</label>
+                                </div>
+                            </div>
+
+                            <!-- Test String Input -->
+                            <div class="mb-4">
+                                <label for="testString" class="form-label">
+                                    Test String                                </label>
+                                <textarea class="form-control" id="testString" rows="8" 
+                                        placeholder="Enter the text you want to test your regex against"></textarea>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg px-4">
+                                    <i class="bi bi-play-fill me-2"></i>Test Regex                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-lg" id="clearBtn">
+                                    <i class="bi bi-trash3 me-2"></i>Clear All                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Results Section -->
+                        <div id="results" class="mt-4 d-none">
+                            <h5 class="d-flex align-items-center gap-2 mb-3">
+                                <i class="bi bi-search"></i>Match Results                            </h5>
+                            <div id="matchResults" class="border rounded p-4 bg-light">
+                                <!-- Results will be inserted here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Column -->
+            <div class="col-lg-4">
+                <!-- Common Patterns Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light py-3">
+                        <h5 class="card-title mb-0 d-flex align-items-center">
+                            <i class="bi bi-bookmark-star me-2"></i>Common Patterns                        </h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <!-- Email Pattern -->
+                        <button class="list-group-item list-group-item-action pattern-example" 
+                                data-pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                                data-type="email">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Email Address</strong>
+                                    <div class="small text-muted">Match email addresses</div>
+                                </div>
+                                <i class="bi bi-lightning-charge text-primary"></i>
+                            </div>
+                        </button>
+
+                        <!-- Phone Pattern -->
+                        <button class="list-group-item list-group-item-action pattern-example" 
+                                data-pattern="\+?\d{1,4}[-.\s]?\d{1,3}[-.\s]?\d{1,4}[-.\s]?\d{1,4}"
+                                data-type="phone">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Phone Number</strong>
+                                    <div class="small text-muted">Match phone numbers with optional country code</div>
+                                </div>
+                                <i class="bi bi-lightning-charge text-primary"></i>
+                            </div>
+                        </button>
+
+                        <!-- URL Pattern -->
+                        <button class="list-group-item list-group-item-action pattern-example" 
+                                data-pattern="https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+                                data-type="url">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>URL</strong>
+                                    <div class="small text-muted">Match web URLs</div>
+                                </div>
+                                <i class="bi bi-lightning-charge text-primary"></i>
+                            </div>
+                        </button>
+
+                        <!-- Date Pattern -->
+                        <button class="list-group-item list-group-item-action pattern-example" 
+                                data-pattern="\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])"
+                                data-type="date">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Date (YYYY-MM-DD)</strong>
+                                    <div class="small text-muted">Match dates in YYYY-MM-DD format</div>
+                                </div>
+                                <i class="bi bi-lightning-charge text-primary"></i>
+                            </div>
+                        </button>
+
+                        <!-- Password Pattern -->
+                        <button class="list-group-item list-group-item-action pattern-example" 
+                                data-pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}"
+                                data-type="password">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Strong Password</strong>
+                                    <div class="small text-muted">At least 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char</div>
+                                </div>
+                                <i class="bi bi-lightning-charge text-primary"></i>
+                            </div>
+                        </button>
+
+                        <!-- Username Pattern -->
+                        <button class="list-group-item list-group-item-action pattern-example" 
+                                data-pattern="^[a-zA-Z0-9_-]{3,16}$"
+                                data-type="username">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Username</strong>
+                                    <div class="small text-muted">Alphanumeric 3-16 chars, may include _ and -</div>
+                                </div>
+                                <i class="bi bi-lightning-charge text-primary"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Reference Card -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light py-3">
+                        <h5 class="card-title mb-0 d-flex align-items-center">
+                            <i class="bi bi-lightning-charge me-2"></i>Quick Reference                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="accordion" id="quickReference">
+                            <!-- Anchors Section -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                                            data-bs-target="#anchorsCollapse">
+                                        Anchors                                    </button>
+                                </h2>
+                                <div id="anchorsCollapse" class="accordion-collapse collapse show" 
+                                     data-bs-parent="#quickReference">
+                                    <div class="accordion-body">
+                                        <pre class="mb-0"><code>^: Start of line\n$: End of line\n\b: Word boundary\n\B: Not word boundary</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Character Classes Section -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                            data-bs-target="#charsCollapse">
+                                        Character Classes                                    </button>
+                                </h2>
+                                <div id="charsCollapse" class="accordion-collapse collapse" 
+                                     data-bs-parent="#quickReference">
+                                    <div class="accordion-body">
+                                        <pre class="mb-0"><code>\d: Digit [0-9]\n\w: Word [A-Za-z0-9_]\n\s: Whitespace\n.: Any character except newline</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Other quick reference sections... -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- FAQ Section -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light py-3">
+                <h5 class="card-title mb-0 d-flex align-items-center">
+                    <i class="bi bi-question-circle me-2"></i>Frequently Asked Questions                </h5>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="faqAccordion">
+                                            <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button " 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#faq1">
+                                    What are regular expressions?                                </button>
+                            </h2>
+                            <div id="faq1" 
+                                 class="accordion-collapse collapse show" 
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Regular expressions (regex) are powerful pattern matching tools used to search, validate, and manipulate text. They provide a flexible way to describe complex text patterns using a special syntax.                                </div>
+                            </div>
+                        </div>
+                                                <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#faq2">
+                                    How do I use this regex tester?                                </button>
+                            </h2>
+                            <div id="faq2" 
+                                 class="accordion-collapse collapse " 
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    1. Enter your regex pattern in the top field<br />
+2. Select any flags you need (g, i, m, etc.)<br />
+3. Enter your test text in the large field<br />
+4. Click "Test Regex" to see matches highlighted<br />
+5. Use the quick reference and examples for help                                </div>
+                            </div>
+                        </div>
+                                                <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#faq3">
+                                    What are common regex mistakes?                                </button>
+                            </h2>
+                            <div id="faq3" 
+                                 class="accordion-collapse collapse " 
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    • Forgetting to escape special characters<br />
+- Not using proper anchors (^ and $)<br />
+- Incorrect character class usage<br />
+- Overuse of greedy quantifiers<br />
+- Not testing edge cases                                </div>
+                            </div>
+                        </div>
+                                                <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#faq4">
+                                    How can I learn more about regex?                                </button>
+                            </h2>
+                            <div id="faq4" 
+                                 class="accordion-collapse collapse " 
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    • Practice with different patterns<br />
+- Study the quick reference guide<br />
+- Try the common patterns examples<br />
+- Test your patterns with various inputs<br />
+- Experiment with different flags                                </div>
+                            </div>
+                        </div>
+                                                <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#faq5">
+                                    What are regex flags used for?                                </button>
+                            </h2>
+                            <div id="faq5" 
+                                 class="accordion-collapse collapse " 
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    • g (global): Find all matches<br />
+- i (case-insensitive): Ignore case<br />
+- m (multiline): Change ^ and $ behavior<br />
+- y (sticky): Match from position<br />
+- u (unicode): Unicode support                                </div>
+                            </div>
+                        </div>
+                                        </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- SEO Content Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5>About Regular Expressions</h5>
+                        <p>Regular expressions (regex) are powerful text pattern matching and manipulation tools used in programming, text processing, and data validation.</p>
+                        <p class="mb-2">Common Use Cases:</p>
+                        <ul>
+                            <li>Form validation (emails, phones, passwords)</li>
+                            <li>Data extraction and parsing</li>
+                            <li>Search and replace operations</li>
+                            <li>Text processing and formatting</li>
+                            <li>Input validation and sanitization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<style>
+/* Custom Styles */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #64748b;
+    --background-light: #f8fafc;
+    --success-light: #d1fae5;
+    --warning-light: #fef3c7;
+    --danger-light: #fee2e2;
+}
+
+.mono {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* Flag Buttons */
+.flag-buttons .btn {
+    padding: 0.5rem 1rem;
+    font-family: monospace;
+    font-size: 1rem;
+    border-radius: 0;
+}
+
+.flag-buttons .btn:first-child {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+
+.flag-buttons .btn:last-child {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.flag-buttons .btn-check:checked + .btn {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Pattern Examples */
+.pattern-example {
+    transition: all 0.2s ease;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+
+.pattern-example:last-child {
+    border-bottom: none;
+}
+
+.pattern-example:hover {
+    background-color: var(--background-light);
+    transform: translateX(5px);
+}
+
+.pattern-example .bi {
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.pattern-example:hover .bi {
+    opacity: 1;
+}
+
+/* Match Highlights */
+.match-highlight {
+    background-color: #ffd70080;
+    border-radius: 2px;
+    padding: 2px 0;
+}
+
+.group-highlight {
+    background-color: #90ee9080;
+    border-radius: 2px;
+    padding: 2px 0;
+}
+
+/* Code Blocks */
+pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+pre code {
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+}
+
+/* Scrollbars */
+.pre-scrollable {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary-color) transparent;
+}
+
+.pre-scrollable::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.pre-scrollable::-webkit-scrollbar-thumb {
+    background-color: var(--secondary-color);
+    border-radius: 3px;
+}
+
+.pre-scrollable::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Accordion Customization */
+.accordion-button:not(.collapsed) {
+    background-color: var(--background-light);
+    color: var(--primary-color);
+}
+
+.accordion-button:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .flag-buttons .btn {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .pre-scrollable {
+        max-height: 150px;
+    }
+}
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+
+    // DOM Elements
+    const form = document.getElementById('regexForm');
+    const patternInput = document.getElementById('regexPattern');
+    const flagsInput = document.getElementById('regexFlags');
+    const testString = document.getElementById('testString');
+    const results = document.getElementById('results');
+    const matchResults = document.getElementById('matchResults');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyBtn = document.getElementById('copyPattern');
+    const flagCheckboxes = document.querySelectorAll('.btn-check');
+
+    // Example test data
+    const exampleData = {
+        'email': `Valid emails:
+example@domain.com
+user.name@company.co.uk
+first.last+label@subdomain.domain.org
+
+Invalid emails:
+test@.com
+@domain.com
+plainaddress
+@#@domain.com`,
+
+        'phone': `Valid phone numbers:
++1-555-123-4567
+(555) 987-6543
++44 20 7123 4567
+555.123.4567
+
+Invalid numbers:
+555-0000
++1-(555)-123-4567x
+123-45678`,
+
+        'url': `Valid URLs:
+https://www.example.com
+http://subdomain.site.co.uk/path?param=1
+https://domain.com/path#section
+
+Invalid URLs:
+http:/missing-slash.com
+https://invalid..com
+just.words`,
+
+        'date': `Valid dates (YYYY-MM-DD):
+2024-01-15
+2023-12-31
+2024-02-29
+
+Invalid dates:
+2024-13-45
+2023-04-31
+24-1-1`,
+
+        'password': `Valid passwords:
+StrongP@ss123
+SecureP@ssw0rd
+C0mpl3x!Pass
+MyP@ssw0rd123
+
+Invalid passwords:
+weak
+NoSpecialChar1
+nouppercasechar1@
+NOLOWERCASE123@`,
+
+        'username': `Valid usernames:
+john_doe
+user123
+cool-name
+jane_doe_123
+developer-2024
+
+Invalid usernames:
+ab
+user@name
+user.name
+very-long-username-that-exceeds-twenty
+spaces not allowed`
+    };
+
+    // Pattern example click handlers
+    document.querySelectorAll('.pattern-example').forEach(button => {
+        button.addEventListener('click', function() {
+            const pattern = this.dataset.pattern;
+            const type = this.dataset.type;
+
+            // Set pattern and appropriate flags
+            patternInput.value = pattern;
+            
+            // Always include 'g' flag for matchAll to work
+            let flags = 'g';
+            if (type === 'username' || type === 'password') {
+                flags = 'gm'; // Add multiline for line-by-line validation
+            } else if (type === 'email' || type === 'url') {
+                flags = 'gi'; // Case insensitive for emails and URLs
+            }
+            
+            flagsInput.value = flags;
+            updateFlagCheckboxes(flags);
+
+            // Set example test data
+            if (exampleData[type]) {
+                testString.value = exampleData[type].trimStart();
+            }
+
+            // Scroll to pattern input
+            patternInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            patternInput.focus();
+
+            // Auto-test
+            setTimeout(testRegex, 100);
+        });
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        testRegex();
+    });
+
+    // Clear button handler
+    clearBtn.addEventListener('click', function() {
+        patternInput.value = '';
+        flagsInput.value = '';
+        testString.value = '';
+        results.classList.add('d-none');
+        matchResults.innerHTML = '';
+        flagCheckboxes.forEach(checkbox => checkbox.checked = false);
+    });
+
+    // Copy button handler
+    copyBtn.addEventListener('click', function() {
+        const pattern = `/${patternInput.value}/${flagsInput.value}`;
+        navigator.clipboard.writeText(pattern).then(() => {
+            showToast('Pattern copied to clipboard!');
+        });
+    });
+
+    // Flag checkbox handlers
+    flagCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateFlags);
+    });
+
+    // Manual flag input handler
+    flagsInput.addEventListener('input', function() {
+        const flags = this.value.toLowerCase().replace(/[^gimuys]/g, '');
+        this.value = flags;
+        updateFlagCheckboxes(flags);
+    });
+
+    // Update flag checkboxes based on input
+    function updateFlagCheckboxes(flags) {
+        document.getElementById('flagGlobal').checked = flags.includes('g');
+        document.getElementById('flagMultiline').checked = flags.includes('m');
+        document.getElementById('flagInsensitive').checked = flags.includes('i');
+        document.getElementById('flagSticky').checked = flags.includes('y');
+        document.getElementById('flagUnicode').checked = flags.includes('u');
+    }
+
+    // Update flags based on checkboxes
+    function updateFlags() {
+        let flags = '';
+        if(document.getElementById('flagGlobal').checked) flags += 'g';
+        if(document.getElementById('flagMultiline').checked) flags += 'm';
+        if(document.getElementById('flagInsensitive').checked) flags += 'i';
+        if(document.getElementById('flagSticky').checked) flags += 'y';
+        if(document.getElementById('flagUnicode').checked) flags += 'u';
+        flagsInput.value = flags;
+    }
+
+    // Main regex testing function
+    function testRegex() {
+        const pattern = patternInput.value;
+        let flags = flagsInput.value;
+        
+        // Ensure 'g' flag is always present
+        if (!flags.includes('g')) {
+            flags += 'g';
+            flagsInput.value = flags;
+            updateFlagCheckboxes(flags);
+        }
+
+        const text = testString.value;
+        results.classList.remove('d-none');
+
+        try {
+            const regex = new RegExp(pattern, flags);
+            const matches = Array.from(text.matchAll(regex));
+
+            if (matches.length > 0) {
+                let html = `<div class="alert alert-success">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Found ${matches.length} match${matches.length > 1 ? 'es' : ''}
+                </div>`;
+
+                // Process matches with line breaks preserved and no extra spaces
+                let highlightedText = '';
+                const textLines = text.split('\n');
+                let currentPosition = 0;
+
+                textLines.forEach((line, lineIndex) => {
+                    let lineContent = '';
+                    let lineLastIndex = 0;
+                    
+                    const lineMatches = matches.filter(match => {
+                        return match.index >= currentPosition && 
+                               match.index < (currentPosition + line.length);
+                    });
+
+                    if (lineMatches.length > 0) {
+                        lineMatches.forEach((match) => {
+                            const relativeIndex = match.index - currentPosition;
+                            const beforeMatch = line.slice(lineLastIndex, relativeIndex);
+                            lineContent += escapeHtml(beforeMatch);
+                            lineContent += `<mark class="match-highlight" data-match="${matches.indexOf(match) + 1}">${escapeHtml(match[0])}</mark>`;
+                            lineLastIndex = relativeIndex + match[0].length;
+                        });
+                        lineContent += escapeHtml(line.slice(lineLastIndex));
+                    } else {
+                        lineContent = escapeHtml(line);
+                    }
+
+                    // Add the line content without extra spaces
+                    highlightedText += lineContent;
+                    
+                    // Add line break if it's not the last line
+                    if (lineIndex < textLines.length - 1) {
+                        highlightedText += '\n';
+                    }
+
+                    currentPosition += line.length + 1;
+                });
+
+                // Display individual matches with proper formatting
+                matches.forEach((match, index) => {
+                    html += `<div class="mt-3">
+                        <div class="small text-muted mb-2">Match #${index + 1}:</div>
+                        <div class="bg-white p-3 rounded border">
+                            <div class="mono">${escapeHtml(match[0])}</div>
+                            ${match.groups ? renderGroups(match.groups) : ''}
+                            <div class="small text-muted mt-2">
+                                Position: ${match.index}
+                            </div>
+                        </div>
+                    </div>`;
+                });
+
+                html = `<div class="bg-white p-3 rounded border mb-3 overflow-auto" style="max-height: 300px;">
+                    <pre class="mb-0" style="white-space: pre-wrap; word-break: break-word;">${highlightedText}</pre>
+                </div>` + html;
+
+                matchResults.innerHTML = html;
+            } else {
+                matchResults.innerHTML = `<div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    No matches found
+                </div>`;
+            }
+        } catch (error) {
+            matchResults.innerHTML = `<div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                Invalid regular expression: ${escapeHtml(error.message)}
+            </div>`;
+        }
+    }
+
+    // Helper Functions
+    function renderGroups(groups) {
+        let html = '<div class="mt-2 small">';
+        for (const [name, value] of Object.entries(groups)) {
+            html += `<div class="text-muted">Group "${name}": ${escapeHtml(value)}</div>`;
+        }
+        html += '</div>';
+        return html;
+    }
+
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast show';
+        toast.innerHTML = `
+            <div class="toast-body">
+                <i class="bi bi-check-circle me-2"></i>${message}
+            </div>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + Enter to test
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            testRegex();
+        }
+        // Escape to clear
+        if (e.key === 'Escape') {
+            clearBtn.click();
+        }
+    });
+
+    // Pattern input paste handler
+    patternInput.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            let value = patternInput.value;
+            if (value.startsWith('/')) {
+                const lastSlash = value.lastIndexOf('/');
+                if (lastSlash > 0) {
+                    const flags = value.slice(lastSlash + 1);
+                    value = value.slice(1, lastSlash);
+                    flagsInput.value = flags;
+                    updateFlagCheckboxes(flags);
+                }
+                patternInput.value = value;
+            }
+        }, 0);
+    });
+
+    // Match highlight hover effects
+    document.addEventListener('mouseover', function(e) {
+        if (e.target.classList.contains('match-highlight')) {
+            const matchNum = e.target.dataset.match;
+            const matches = document.querySelectorAll(`[data-match="${matchNum}"]`);
+            matches.forEach(match => {
+                match.style.backgroundColor = '#ffe44d';
+            });
+        }
+    });
+
+    document.addEventListener('mouseout', function(e) {
+        if (e.target.classList.contains('match-highlight')) {
+            const matchNum = e.target.dataset.match;
+            const matches = document.querySelectorAll(`[data-match="${matchNum}"]`);
+            matches.forEach(match => {
+                match.style.backgroundColor = '';
+            });
+        }
+    });
+
+    // Auto-resize textarea
+    testString.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Load saved state on page load
+    if (localStorage.getItem('regexTesterState')) {
+        const state = JSON.parse(localStorage.getItem('regexTesterState'));
+        patternInput.value = state.pattern || '';
+        flagsInput.value = state.flags || '';
+        testString.value = state.testString || '';
+        updateFlagCheckboxes(state.flags);
+        if (state.pattern && state.testString) {
+            testRegex();
+        }
+    }
+
+    // Save state on change
+    ['input', 'change'].forEach(event => {
+        [patternInput, flagsInput, testString].forEach(element => {
+            element.addEventListener(event, () => {
+                localStorage.setItem('regexTesterState', JSON.stringify({
+                    pattern: patternInput.value,
+                    flags: flagsInput.value,
+                    testString: testString.value
+                }));
+            });
+        });
+    });
+});
+</script>    
